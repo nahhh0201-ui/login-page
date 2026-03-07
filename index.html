@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kaalchakra CTF Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: url('https://i.imgur.com/LXcDQWj.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: brightness(0.65);
+        }
+
+        .login-box {
+            background: #000000dd;
+            backdrop-filter: blur(12px);
+            padding: 48px 32px;
+            border-radius: 12px;
+            width: 380px;
+            border: 1px solid #96651a;
+            box-shadow: 0 0 40px #000000ee;
+        }
+
+        h2 {
+            color: #d49221;
+            text-align: center;
+            margin-bottom: 32px;
+            font-weight: 600;
+        }
+
+        .input {
+            width: 100%;
+            padding: 14px 16px;
+            margin: 8px 0 16px 0;
+            background: #1a1a1a;
+            border: 1px solid #775114;
+            border-radius: 6px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .button {
+            width: 100%;
+            padding: 14px;
+            background: #b87a19;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        .button:hover {
+            background: #d8901c;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 16px;
+            color: #ff4444;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+    <h2>Authorized Login Only</h2>
+    <input type="text" class="input" id="user" placeholder="Username">
+    <input type="password" class="input" id="pass" placeholder="Password">
+    <button class="button" onclick="login()">Login</button>
+    <div class="message" id="msg"></div>
+</div>
+
+<script>
+let attempts = parseInt(localStorage.getItem('attempts') || 0);
+
+async function hash(s) {
+    return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-1', new TextEncoder().encode(s))))
+        .map(b => b.toString(16).padStart(2,'0')).join('')
+}
+
+async function login() {
+    attempts++;
+    localStorage.setItem('attempts', attempts);
+
+    if(attempts >= 3) {
+        document.body.innerHTML = `<div style="color:red;font-size:32px;text-align:center;width:90%">🚨 ADMIN HAS BLOCKED YOUR SYSTEM 🚨<br><br>Contact event organisers to unblock</div>`;
+        return;
+    }
+
+    let u = await hash(document.getElementById('user').value);
+    let p = await hash(document.getElementById('pass').value);
+
+    if(u === 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d' && p === '707b10ba2d8020957997e4127c99147091087a71') {
+        alert('✅ Login successful Welcome Admin');
+        localStorage.removeItem('attempts');
+    } else {
+        document.getElementById('msg').innerText = `❌ Wrong credentials. ${2-attempts} attempts remaining`;
+    }
+}
+
+if(attempts >=3) {
+    document.body.innerHTML = `<div style="color:red;font-size:32px;text-align:center;width:90%">🚨 ADMIN HAS BLOCKED YOUR SYSTEM 🚨<br><br>Contact event organisers to unblock</div>`;
+}
+
+document.addEventListener('keydown', e => e.key === 'Enter' && login());
+</script>
+
+</body>
+</html>
