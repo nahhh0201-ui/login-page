@@ -108,7 +108,7 @@ async function login() {
     let u = await hash(document.getElementById('user').value);
     let p = await hash(document.getElementById('pass').value);
 
-    if(u === 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d' && p === '707b10ba2d8020957997e4127c99147091087a71')  ////qv7pL60GZzEhXDMc6IEtGqFxS-oS4CahaOem_Qaro=  
+    if(u === 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d' && p === '707b10ba2d8020957997e4127c99147091087a71')  ////"KRgda0-jlu6DtCQ8dUE5XyMJHI23ubzxASpu9fzy8V8="
     {
         alert('✅ Login successful Welcome Admin');
         localStorage.removeItem('attempts');
@@ -127,3 +127,4 @@ document.addEventListener('keydown', e => e.key === 'Enter' && login());
 </body>
 
 </html>
+
